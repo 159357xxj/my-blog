@@ -1,0 +1,156 @@
+info:
+  title: 陈一平的博客
+  subtitle: 代码 · 学习 · 生活
+  author: chenyiping
+  url: https://my-blog-33h.pages.dev
+
+colors:
+  primary: "#0f766e"
+  default_mode: light
+
+global:
+  content_max_width: 1080px
+  hover:
+    shadow: true
+    scale: false
+  scroll_progress:
+    bar: true
+    percentage: true
+  website_counter:
+    enable: false
+  single_page: true
+  preloader:
+    enable: false
+  open_graph:
+    enable: true
+    description: 记录代码、学习与生活中的思考。
+
+home_banner:
+  enable: true
+  style: static
+  title: 陈一平的博客
+  subtitle:
+    text:
+      - 代码 · 学习 · 生活
+      - 记录问题，也记录答案
+    typing_speed: 80
+    backing_speed: 45
+    starting_delay: 900
+    backing_delay: 1800
+    loop: true
+    smart_backspace: true
+  text_color:
+    light: "#f8fafc"
+    dark: "#f8fafc"
+  text_style:
+    title_size: 3.2rem
+    subtitle_size: 1.15rem
+    line_height: 1.25
+  social_links:
+    enable: true
+    style: center
+    links:
+      - icon: github
+        url: https://github.com/159357xxj
+      - icon: twitter
+        url:
+      - icon: email
+        url:
+      - icon: telegram
+        url:
+      - icon: /images/custom-icon.svg
+        url:
+
+navbar:
+  auto_hide: false
+  color:
+    left: "#0f766e"
+    right: "#ef8354"
+    transparency: 18
+  links:
+    Home:
+      path: none
+      icon:
+    首页:
+      path: /
+      icon: fa-regular fa-house
+    归档:
+      path: /archives
+      icon: fa-regular fa-archive
+    分类:
+      path: /categories
+      icon: fa-regular fa-folder
+    标签:
+      path: /tags
+      icon: fa-regular fa-tags
+    关于:
+      path: /about
+      icon: fa-regular fa-user
+  search:
+    enable: true
+    preload: true
+
+home:
+  sidebar:
+    enable: true
+    position: left
+    first_item: info
+    announcement: 保持好奇，持续记录。
+    show_on_mobile: true
+    links:
+      归档:
+        path: /archives
+        icon: fa-regular fa-archive
+      标签:
+        path: /tags
+        icon: fa-regular fa-tags
+      分类:
+        path: /categories
+        icon: fa-regular fa-folder
+  article_date_format: YYYY-MM-DD
+  excerpt_length: 150
+  categories:
+    enable: true
+    limit: 3
+  tags:
+    enable: true
+    limit: 3
+
+articles:
+  word_count:
+    enable: true
+    count: true
+    min2read: true
+  author_label:
+    enable: false
+  toc:
+    enable: true
+    max_depth: 3
+    number: false
+    expand: true
+    init_open: true
+  copyright:
+    enable: true
+    default: cc_by_nc_sa
+
+comment:
+  enable: false
+
+footer:
+  runtime: true
+  start: 2026/09/17 00:00:00
+  statistics: true
+  customize: 用文字保存思考，用代码解决问题。
+
+inject:
+  enable: true
+  head:
+    - '<link rel="stylesheet" href="/css/site-enhancements.css">'
+  footer:
+    - '<script src="/js/site-enhancements.js"></script>'
+
+search:
+  path: search.xml
+  field: post
+  content: true
+  format: html

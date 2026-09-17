@@ -1,0 +1,177 @@
+/* React Bits-inspired effects implemented without a React runtime. */
+.home-banner-container {
+  height: min(760px, 82vh) !important;
+  min-height: min(760px, 82vh) !important;
+  max-height: 760px;
+  background: #071316;
+}
+
+.home-banner-container .content {
+  min-height: min(700px, 76vh) !important;
+  z-index: 2;
+}
+
+.home-banner-background {
+  overflow: hidden;
+  background: #071316;
+}
+
+.home-banner-background > img {
+  opacity: 0 !important;
+}
+
+.native-aurora {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.home-banner-container::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(7, 19, 22, 0.06), rgba(7, 19, 22, 0.42));
+}
+
+.home-banner-container .description {
+  padding: 0 1.25rem;
+  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.32);
+}
+
+.navbar-content.has-home-banner .logo-title,
+.navbar-content.has-home-banner .logo-title h1,
+.navbar-content.has-home-banner .navbar-item > a,
+.navbar-content.has-home-banner .navbar-item > a i,
+.navbar-content.has-home-banner .navbar-item.search {
+  color: #f8fafc !important;
+}
+
+.navbar-content.has-home-banner {
+  text-shadow: 0 1px 14px rgba(0, 0, 0, 0.35);
+}
+
+.home-sidebar-container .avatar::before {
+  content: "C";
+  display: grid;
+  place-items: center;
+  width: 86px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  color: #f8fafc;
+  background: #0f766e;
+  font-size: 2rem;
+  font-weight: 500;
+  box-shadow: inset 0 0 0 5px rgba(255, 255, 255, 0.18);
+}
+
+.home-sidebar-container .avatar img {
+  display: none;
+}
+
+.split-title {
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  letter-spacing: 0;
+}
+
+.split-char {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(24px) rotate(2deg);
+  animation: split-char-in 680ms cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  animation-delay: calc(var(--char-index) * 55ms + 120ms);
+}
+
+@keyframes split-char-in {
+  to {
+    opacity: 1;
+    transform: translateY(0) rotate(0);
+  }
+}
+
+.home-article-item {
+  --spot-x: 50%;
+  --spot-y: 50%;
+  isolation: isolate;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--border-color) 82%, transparent);
+  transition: transform 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
+}
+
+.home-article-item::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(
+    280px circle at var(--spot-x) var(--spot-y),
+    rgba(15, 118, 110, 0.18),
+    rgba(239, 131, 84, 0.06) 38%,
+    transparent 72%
+  );
+  transition: opacity 180ms ease;
+}
+
+.home-article-item > * {
+  position: relative;
+  z-index: 1;
+}
+
+.home-article-item.is-spotlight-active {
+  transform: translateY(-3px);
+  border-color: rgba(15, 118, 110, 0.38);
+  box-shadow: 0 18px 42px rgba(15, 45, 43, 0.12);
+}
+
+.home-article-item.is-spotlight-active::before {
+  opacity: 1;
+}
+
+html.dark .home-article-item::before {
+  background: radial-gradient(
+    280px circle at var(--spot-x) var(--spot-y),
+    rgba(45, 212, 191, 0.17),
+    rgba(251, 146, 60, 0.05) 40%,
+    transparent 72%
+  );
+}
+
+@media (max-width: 640px) {
+  .home-banner-container {
+    height: 74vh !important;
+    min-height: 74vh !important;
+    max-height: none;
+  }
+
+  .home-banner-container .content {
+    min-height: 68vh !important;
+  }
+
+  .home-banner-container .description {
+    font-size: 2.25rem !important;
+  }
+}
+
+@media (hover: none), (prefers-reduced-motion: reduce) {
+  .split-char {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+
+  .home-article-item,
+  .home-article-item.is-spotlight-active {
+    transform: none;
+  }
+
+  .home-article-item::before {
+    display: none;
+  }
+}
