@@ -50,7 +50,12 @@ export async function onRequestGet(context) {
 
   // 校验登录者身份，只有站主本人可以拿到 token
   const userRes = await fetch('https://api.github.com/user', {
-    headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json' },
+    headers: {
+  Authorization: `Bearer ${token}`,
+  Accept: 'application/vnd.github+json',
+  'User-Agent': 'chenyiping-blog-admin',
+  'X-GitHub-Api-Version': '2022-11-28',
+},
   });
   if (!userRes.ok) {
     console.error('GitHub user lookup failed:', userRes.status);
