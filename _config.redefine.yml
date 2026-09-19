@@ -30,15 +30,8 @@ home_banner:
   style: static
   title: 陈一平的博客
   subtitle:
-    text:
-      - 代码 · 学习 · 生活
-      - 记录问题，也记录答案
-    typing_speed: 80
-    backing_speed: 45
-    starting_delay: 900
-    backing_delay: 1800
-    loop: true
-    smart_backspace: true
+    # Rendered by the particle Canvas instead of the theme's Typed.js effect.
+    text: []
   text_color:
     light: "#f8fafc"
     dark: "#f8fafc"

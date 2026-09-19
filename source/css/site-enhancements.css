@@ -1,18 +1,21 @@
-/* React Bits-inspired effects implemented without a React runtime. */
+/* Homepage particle typography and article-card interactions. */
 .home-banner-container {
-  height: min(760px, 82vh) !important;
-  min-height: min(760px, 82vh) !important;
-  max-height: 760px;
+  height: 100svh !important;
+  min-height: 100svh !important;
+  max-height: none !important;
+  overflow: hidden;
+  isolation: isolate;
   background: #071316;
 }
 
-.home-banner-container .content {
-  min-height: min(700px, 76vh) !important;
-  z-index: 2;
-}
-
 .home-banner-background {
+  inset: 0 !important;
+  z-index: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
   overflow: hidden;
+  transform: none !important;
+  scale: 1 !important;
   background: #071316;
 }
 
@@ -20,9 +23,11 @@
   opacity: 0 !important;
 }
 
-.native-aurora {
+.particle-hero-canvas {
   position: absolute;
   inset: 0;
+  z-index: 1;
+  display: block;
   width: 100%;
   height: 100%;
   pointer-events: none;
@@ -32,14 +37,64 @@
   content: "";
   position: absolute;
   inset: 0;
-  z-index: 1;
+  z-index: 2;
   pointer-events: none;
-  background: linear-gradient(180deg, rgba(7, 19, 22, 0.06), rgba(7, 19, 22, 0.42));
+  background:
+    linear-gradient(180deg, rgba(3, 14, 16, 0.18), transparent 29%, rgba(3, 14, 16, 0.24)),
+    radial-gradient(circle at 50% 48%, transparent 0 32%, rgba(3, 14, 16, 0.18) 76%, rgba(3, 14, 16, 0.46));
 }
 
+.home-banner-container .content {
+  position: relative;
+  z-index: 3 !important;
+  min-height: 100% !important;
+  margin-top: 0 !important;
+}
+
+/* The theme keeps semantic title markup; Canvas provides the visual title. */
 .home-banner-container .description {
   padding: 0 1.25rem;
-  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.32);
+  opacity: 0;
+  pointer-events: none;
+  user-select: none;
+}
+
+.particle-a11y {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.particle-fallback {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: none;
+  place-content: center;
+  padding: 5rem 1.5rem 3rem;
+  color: #f5fbfa;
+  text-align: center;
+  pointer-events: none;
+}
+
+.particle-fallback h1 {
+  margin: 0;
+  font-size: clamp(2.25rem, 7vw, 5.25rem);
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1.2;
+}
+
+.particle-fallback p {
+  margin: 1rem 0 0;
+  color: #b7d8d4;
+  font-size: clamp(1rem, 2vw, 1.45rem);
 }
 
 .navbar-content.has-home-banner .logo-title,
@@ -70,28 +125,6 @@
 
 .home-sidebar-container .avatar img {
   display: none;
-}
-
-.split-title {
-  display: inline-flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  letter-spacing: 0;
-}
-
-.split-char {
-  display: inline-block;
-  opacity: 0;
-  transform: translateY(24px) rotate(2deg);
-  animation: split-char-in 680ms cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-  animation-delay: calc(var(--char-index) * 55ms + 120ms);
-}
-
-@keyframes split-char-in {
-  to {
-    opacity: 1;
-    transform: translateY(0) rotate(0);
-  }
 }
 
 .home-article-item {
@@ -144,31 +177,42 @@ html.dark .home-article-item::before {
 }
 
 @media (max-width: 640px) {
-  .home-banner-container {
-    height: 74vh !important;
-    min-height: 74vh !important;
-    max-height: none;
-  }
-
+  .home-banner-container,
   .home-banner-container .content {
-    min-height: 68vh !important;
+    height: 100svh !important;
+    min-height: 100svh !important;
   }
 
-  .home-banner-container .description {
-    font-size: 2.25rem !important;
+  .home-sidebar-container .avatar::before {
+    width: 72px;
+    font-size: 1.7rem;
   }
 }
 
-@media (hover: none), (prefers-reduced-motion: reduce) {
-  .split-char {
-    opacity: 1;
+@media (hover: none) {
+  .home-article-item,
+  .home-article-item.is-spotlight-active {
     transform: none;
-    animation: none;
+  }
+
+  .home-article-item::before {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .particle-hero-canvas {
+    display: none;
+  }
+
+  .particle-fallback {
+    display: grid;
   }
 
   .home-article-item,
   .home-article-item.is-spotlight-active {
     transform: none;
+    transition: none;
   }
 
   .home-article-item::before {
