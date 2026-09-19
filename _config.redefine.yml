@@ -79,6 +79,9 @@ navbar:
     关于:
       path: /about
       icon: fa-regular fa-user
+    管理:
+      path: /admin/
+      icon: fa-regular fa-pen-to-square
   search:
     enable: true
     preload: true

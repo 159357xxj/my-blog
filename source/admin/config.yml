@@ -1,0 +1,38 @@
+locale: zh_Hans
+
+backend:
+  name: github
+  repo: 159357xxj/my-blog
+  branch: main
+  base_url: https://my-blog-33h.pages.dev/api
+
+media_folder: source/images
+public_folder: /images
+
+collections:
+  - name: posts
+    label: 文章
+    label_singular: 文章
+    folder: source/_posts
+    create: true
+    slug: "{{title}}"
+    sortable_fields: [date, title]
+    preview_path: "{{slug}}"
+    editor:
+      preview: true
+    fields:
+      - { label: 标题, name: title, widget: string }
+      - { label: 发布日期, name: date, widget: datetime, format: "YYYY-MM-DD HH:mm:ss", date_format: "YYYY-MM-DD", time_format: "HH:mm:ss" }
+      - { label: 标签, name: tags, widget: list, required: false }
+      - { label: 分类, name: categories, widget: list, required: false }
+      - { label: 正文, name: body, widget: markdown }
+
+  - name: pages
+    label: 页面
+    folder: source/about
+    create: false
+    editor:
+      preview: true
+    fields:
+      - { label: 标题, name: title, widget: string }
+      - { label: 正文, name: body, widget: markdown }
