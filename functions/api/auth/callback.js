@@ -11,15 +11,19 @@ const htmlPage = (script) =>
     { headers: { 'Content-Type': 'text/html; charset=utf-8' } },
   );
 
+const errorPage = (message) =>
+  htmlPage('alert(' + JSON.stringify(message) + ');window.close();');
+
 export async function onRequestGet(context) {
   const { request, env } = context;
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get('code');
 
   if (!code || !env.GITHUB_CLIENT_ID || !env.GITHUB_CLIENT_SECRET) {
-    return htmlPage('alert("登录失败：缺少授权码或服务端未配置环境变量。");window.close();');
+    return errorPage('登录失败：缺少授权码或服务端未配置环境变量。');
   }
 
+  try {
   // 用 code 换取 access token（secret 只在服务端使用，不会进入前端）
   const tokenRes = await fetch('https://github.com/login/oauth/access_token', {
     method: 'POST',
@@ -28,24 +32,36 @@ export async function onRequestGet(context) {
       client_id: env.GITHUB_CLIENT_ID,
       client_secret: env.GITHUB_CLIENT_SECRET,
       code,
+      redirect_uri: origin + '/api/auth/callback',
     }),
   });
-  const tokenData = await tokenRes.json();
-  const token = tokenData.access_token;
+  if (!tokenRes.ok) {
+    console.error('GitHub OAuth token exchange failed:', tokenRes.status);
+    return errorPage('登录失败：GitHub 拒绝换取授权令牌，请重新发起登录。');
+  }
+
+  const tokenData = await tokenRes.json().catch(() => null);
+  const token = tokenData && tokenData.access_token;
 
   if (!token) {
-    return htmlPage('alert("登录失败：GitHub 未返回有效 token。");window.close();');
+    console.error('GitHub OAuth response did not include an access token.');
+    return errorPage('登录失败：GitHub 未返回有效授权令牌，请重新登录。');
   }
 
   // 校验登录者身份，只有站主本人可以拿到 token
   const userRes = await fetch('https://api.github.com/user', {
     headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json' },
   });
-  const user = await userRes.json();
+  if (!userRes.ok) {
+    console.error('GitHub user lookup failed:', userRes.status);
+    return errorPage('登录失败：无法校验 GitHub 账号，请重新登录。');
+  }
+
+  const user = await userRes.json().catch(() => null);
   const allowedLogin = (env.ALLOWED_GITHUB_LOGIN || '159357xxj').toLowerCase();
 
-  if ((user.login || '').toLowerCase() !== allowedLogin) {
-    return htmlPage('alert("该 GitHub 账号没有管理权限。");window.close();');
+  if (((user && user.login) || '').toLowerCase() !== allowedLogin) {
+    return errorPage('该 GitHub 账号没有管理权限。');
   }
 
   // 按 Decap CMS 约定的 postMessage 协议把 token 交还后台页面
@@ -53,4 +69,8 @@ export async function onRequestGet(context) {
   return htmlPage(
     `window.opener && window.opener.postMessage(${JSON.stringify(message)}, ${JSON.stringify(origin)});window.close();`,
   );
+  } catch (error) {
+    console.error('GitHub OAuth callback failed:', error instanceof Error ? error.message : String(error));
+    return errorPage('登录服务暂时异常，请稍后重试。');
+  }
 }
