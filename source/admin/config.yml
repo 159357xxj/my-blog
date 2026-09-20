@@ -4,7 +4,8 @@ backend:
   name: github
   repo: 159357xxj/my-blog
   branch: main
-  base_url: https://my-blog-33h.pages.dev/api
+  base_url: https://my-blog-33h.pages.dev
+  auth_endpoint: api/auth
 
 media_folder: source/images
 public_folder: /images
